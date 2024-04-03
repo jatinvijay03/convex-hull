@@ -178,13 +178,13 @@ class _GraphState extends State<Graph> {
       Ordered = ap.Ordered;
       // final_convex_hull = ap.final_convex_hull;
     });
-
+    int a = 10;
     for (int i = 0; i < Ordered.length; i++) {
       setState(() {
         upperBridgePoints.add(Ordered[i][0]);
       });
 
-      await Future.delayed(const Duration(milliseconds: 1000));
+      await Future.delayed(Duration(milliseconds: a));
       setState(() {
         quadrilateral = Ordered[i][1];
       });
@@ -206,9 +206,9 @@ class _GraphState extends State<Graph> {
   }
 
   void runAlgojm() async {
-    print("Yooooo");
-    animatedPointsjm jm = jarvisMarch(data);
     
+    animatedPointsjm jm = jarvisMarch(data);
+
     setState(() {
    final_convex_hull = [];
 
