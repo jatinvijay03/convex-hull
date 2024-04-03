@@ -8,7 +8,7 @@ class Custom_Point {
   int get hashCode => x.hashCode ^ y.hashCode;
 
   @override
-  String toString() => '($x, $y)';
+  String toString() => 'Custom_Point($x, $y)';
 }
 
 class animatedPoints {

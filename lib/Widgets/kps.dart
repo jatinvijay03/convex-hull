@@ -20,18 +20,25 @@ class Line {
   String toString() => 'Line from $p1 to $p2';
 }
 
-findkirkpatrik(){
-  
-}
-
-/// Global lists to store intermediate and final results of the convex hull computation, and are used as the object passed to the frontend to display the animations
 List <List<Custom_Point>> upperBridgePoints = [];
 List <List<Custom_Point>> lowerBridgePoints = [];
 List <List<Custom_Point>> quadrilateral = [];
 List <List<Custom_Point>> removedPoints = [];
 List <Custom_Point> cvhull = [];
 List <List<List<Custom_Point>>> Ordered = [];
-animatedPoints fin = animatedPoints(upperBridgePoints,lowerBridgePoints,quadrilateral,removedPoints,cvhull,Ordered);
+
+
+findkps(points){
+  upperBridgePoints = [];
+  lowerBridgePoints = [];
+  quadrilateral = [];
+  removedPoints = [];
+  cvhull = [];
+  Ordered = [];
+  kirkPatrick(points);
+  animatedPoints fin = animatedPoints(upperBridgePoints,lowerBridgePoints,quadrilateral,removedPoints,cvhull,Ordered);
+  return fin;
+}
 
 /// Determined if a point is inside a set of points(polygon here)
 bool pointInPolygon(Custom_Point point, List<Custom_Point> polygon) {
@@ -410,7 +417,7 @@ List<Custom_Point> upperHull(Custom_Point pUmin, Custom_Point pUmax, List <Custo
   temp.add(ubridge.p2);
 
   temp.add(pUmax);
-  fin.upperBridgePoints.add(temp);
+  upperBridgePoints.add(temp);
   List<Custom_Point> pointsToRemove = [];
   List<Custom_Point> uBridgePoints = [];
   uBridgePoints.add(pUmin);
@@ -418,14 +425,14 @@ List<Custom_Point> upperHull(Custom_Point pUmin, Custom_Point pUmax, List <Custo
   uBridgePoints.add(ubridge.p2);
   uBridgePoints.add(pUmax);
   uBridgePoints.add(pUmin);
-  /// Remove points that are inside the polygon formed by the upper bridge and the extreme points.
-  fin.quadrilateral.add(uBridgePoints);
+
+  quadrilateral.add(uBridgePoints);
   for (int i = 0; i < pointsCopy.length; i++) {
         if (pointInPolygon(pointsCopy[i], uBridgePoints) && !uBridgePoints.contains(pointsCopy[i])) {
           pointsToRemove.add(pointsCopy[i]);
         }
   }
-  fin.removedPoints.add(pointsToRemove);
+  removedPoints.add(pointsToRemove);
   for (int i = 0; i < pointsToRemove.length; i++) {
         pointsCopy.remove(pointsToRemove[i]);
   }
@@ -478,7 +485,7 @@ List<Custom_Point> lowerHull(Custom_Point pLmin, Custom_Point pLmax, List <Custo
   temp.add(lbridge.p1);
   temp.add(lbridge.p2);
   temp.add(pLmax);
-  fin.lowerBridgePoints.add(temp);
+  lowerBridgePoints.add(temp);
   List<Custom_Point> pointsToRemove = [];
   List<Custom_Point> lBridgePoints = [];
   lBridgePoints.add(pLmin);
@@ -486,14 +493,13 @@ List<Custom_Point> lowerHull(Custom_Point pLmin, Custom_Point pLmax, List <Custo
   lBridgePoints.add(lbridge.p2);
   lBridgePoints.add(pLmax);
   lBridgePoints.add(pLmin);
-  fin.quadrilateral.add(lBridgePoints);
-  /// Remove points that are inside the polygon formed by the lower bridge and the extreme points.
+  quadrilateral.add(lBridgePoints);
   for (int i = 0; i < pointsCopy.length; i++) {
         if (pointInPolygon(pointsCopy[i], lBridgePoints) && !lBridgePoints.contains(pointsCopy[i])) {
           pointsToRemove.add(pointsCopy[i]);
         }
   }
-  fin.removedPoints.add(pointsToRemove);
+  removedPoints.add(pointsToRemove);
   Ordered.add([temp,lBridgePoints,pointsToRemove]);
   for (int i = 0; i < pointsToRemove.length; i++) {
         pointsCopy.remove(pointsToRemove[i]);
@@ -519,7 +525,6 @@ List<Custom_Point> lowerHull(Custom_Point pLmin, Custom_Point pLmax, List <Custo
     }
   }
   tRight.add(lBridgePoints[2]);
-  /// Recursively construct the lower hull for the left and right subsets.
   List<Custom_Point> lowerHullLeft = lowerHull(pLmax,lBridgePoints[2],tRight);
   List<Custom_Point> lowerHullRight = lowerHull(lBridgePoints[1],pLmin,tLeft);
   List<Custom_Point> lowerHullFinal = [];
@@ -530,11 +535,9 @@ List<Custom_Point> lowerHull(Custom_Point pLmin, Custom_Point pLmax, List <Custo
   return lowerHullFinal;
 }
 
-/// The main function for the Kirkpatrick-Seidel algorithm.
-/// It computes the convex hull of a set of points by combining the upper and lower hulls.
+void kirkPatrick(List<Custom_Point> points) {
 
-animatedPoints kirkPatrick(List<Custom_Point> points) {
-
+  print(Ordered.length);
   points.sort((a, b) => a.x.compareTo(b.x));
   Custom_Point pumin = findPumin(points);
   Custom_Point pumax = findPumax(points);
@@ -560,6 +563,13 @@ animatedPoints kirkPatrick(List<Custom_Point> points) {
   convexHull.addAll(upperHullP);
   convexHull.addAll(lowerHullP);
   convexHull.add(upperHullP[0]);
-  fin.final_convex_hull = convexHull;
-  return(fin);
+  // for(int i = 0; i < convexHull.length; i++) {
+  //   fin.convexHull.add(convexHull[i]);
+  // }
+  
+  // print("Convex Hull Points: ");
+  // print(convexHull);
+  cvhull= convexHull;
+  print(Ordered.length);
+
 }

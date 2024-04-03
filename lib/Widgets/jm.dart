@@ -1,13 +1,22 @@
 import 'dart:math';
 import 'Custom_Point.dart';
 
-animatedPointsjm jmfin = animatedPointsjm([], []); /// Initialize animation data
 
-/// Function to determine the orientation of three points (p, q, r). It uses the slope format and some mathematical simplification in order to generate an equation to find the direction of another point (in this case r) with respect to 2 given points (in this case p and q) 
-/// Returns:
-///   0 if points are collinear
-///   1 if points are in a clockwise orientation
-///   2 if points are in a counterclockwise orientation
+
+List<List<Custom_Point>> updates = [];
+List<List<Custom_Point>> removedP = [];
+
+
+findjm(points){
+  updates = [];
+  removedP = [];
+  convexHull(points);
+  print(updates.length);
+  print(removedP.length);
+  animatedPointsjm jmfin = animatedPointsjm(updates,removedP);
+  return jmfin;
+}
+
 int orientation(Custom_Point p, Custom_Point q, Custom_Point r) {
   double val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
 
@@ -63,22 +72,23 @@ List<Custom_Point> convexHull(List<Custom_Point> points) {
   }
 
   int p = l, q;
-  /// Start Jarvis March algorithm
+  List<Custom_Point> temp1=[];
   do {
-    hull.add(points[p]); /// Add current point to the hull
-    q = (p + 1) % points.length; /// Set next point to the next point in array
-
-    /// Find the next point among the remaining points which have a possibility of being on a more counterclosckwise / clockwise direction, depending upon the need (in our case it is counterclockwise)
+    hull.add(points[p]);
+    q = (p + 1) % points.length;
+    List<Custom_Point> temp=[];
+    temp.add(points[q]);
     for (int i = 0; i < points.length; i++) {
-      if (orientation(points[p], points[i], points[q]) == 2) {
+      if (orientation(points[p], points[i], points[q]) == 2 ) {
         q = i;
       }
     }
-
+    temp.insert(0,points[p]);
+    updates.add(temp);
+    print(updates.length);
+    p = q;
     List<Custom_Point> pointsToRemove = [];
     List<Custom_Point> pointsCopy = List.from(points);
-
-    /// Check if there are enough points to form a convex hull
     if (hull.length >= 3) {
       for (int i = 0; i < pointsCopy.length; i++) {
         if (pointInPolygon(pointsCopy[i], hull)) {
@@ -89,11 +99,7 @@ List<Custom_Point> convexHull(List<Custom_Point> points) {
       for (int i = 0; i < hull.length; i++) {
         pointsToRemove.add(hull[i]);
       }
-
-      /// Store removed points for animation
-      jmfin.removedP.add(pointsToRemove);
-
-      /// Remove points from the original list
+      removedP.add(pointsToRemove);
       for (int i = 0; i < pointsToRemove.length; i++) {
         pointsCopy.remove(pointsToRemove[i]);
       }
@@ -105,8 +111,17 @@ List<Custom_Point> convexHull(List<Custom_Point> points) {
   return hull;
 }
 
-/// Function to compute the convex hull of a set of points using Jarvis March algorithm
-animatedPointsjm jarvisMarch(List<Custom_Point> points) {
-  convexHull(points); /// Compute convex hull
-  return jmfin; /// Return animation data
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

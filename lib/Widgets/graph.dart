@@ -1,3 +1,9 @@
+import 'dart:js_util';
+import 'dart:math';
+
+import 'package:convex_hull/colors.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
 import 'kps.dart';
@@ -16,119 +22,53 @@ class Graph extends StatefulWidget {
 class _GraphState extends State<Graph> {
 
   List<Custom_Point> data = [
-    Custom_Point(30, 70),
-    Custom_Point(53, 32),
-    Custom_Point(74, 66),
-    Custom_Point(40, 80),
-    Custom_Point(17, 25),
-    Custom_Point(80, 45),
-    Custom_Point(10, 90),
-    Custom_Point(60, 10),
-    Custom_Point(90, 20),
-    Custom_Point(45, 55),
-    Custom_Point(85, 85),
-    Custom_Point(25, 35),
-    Custom_Point(15, 60),
-    Custom_Point(70, 5),
-    Custom_Point(5, 10),
-    Custom_Point(50, 75),
-    Custom_Point(95, 50),
-    Custom_Point(20, 30),
-    Custom_Point(35, 65),
-    Custom_Point(75, 15),
-    Custom_Point(55, 80),
-    Custom_Point(65, 40),
-    Custom_Point(45, 20),
-    Custom_Point(10, 40),
-    Custom_Point(80, 75),
-    Custom_Point(30, 50),
-    Custom_Point(55, 5),
-    Custom_Point(85, 30),
-    Custom_Point(25, 75),
-    Custom_Point(60, 90),
-    Custom_Point(40, 10),
-    Custom_Point(90, 60),
-    Custom_Point(70, 35),
-    Custom_Point(50, 30),
-    Custom_Point(15, 5),
-    Custom_Point(20, 45),
-    Custom_Point(75, 80),
-    Custom_Point(5, 85),
-    Custom_Point(35, 15),
-    Custom_Point(95, 10),
-    Custom_Point(10, 65),
-    Custom_Point(45, 50),
-    Custom_Point(60, 25),
-    Custom_Point(25, 10),
-    Custom_Point(50, 60),
-    Custom_Point(80, 20),
-    Custom_Point(30, 95),
-    Custom_Point(55, 70),
-    Custom_Point(85, 40),
-    Custom_Point(70, 85),
-    Custom_Point(40, 55),
-    Custom_Point(15, 20),
-    Custom_Point(5, 50),
-    Custom_Point(45, 5),
-    Custom_Point(90, 90),
-    Custom_Point(20, 80),
-    Custom_Point(75, 25),
-    Custom_Point(35, 45),
-    Custom_Point(95, 75),
-    Custom_Point(10, 15),
-    Custom_Point(65, 80),
-    Custom_Point(25, 60),
-    Custom_Point(60, 35),
-    Custom_Point(50, 10),
-    Custom_Point(80, 65),
-    Custom_Point(30, 25),
-    Custom_Point(55, 90),
-    Custom_Point(85, 15),
-    Custom_Point(70, 50),
-    Custom_Point(40, 40),
-    Custom_Point(15, 75),
-    Custom_Point(5, 20),
-    Custom_Point(45, 95),
-    Custom_Point(90, 30),
-    Custom_Point(20, 5),
-    Custom_Point(75, 60),
-    Custom_Point(35, 80),
-    Custom_Point(95, 20),
-    Custom_Point(10, 50),
-    Custom_Point(65, 15),
-    Custom_Point(25, 90),
-    Custom_Point(60, 55),
-    Custom_Point(50, 35),
-    Custom_Point(85, 70),
-    Custom_Point(70, 95),
-    Custom_Point(40, 25),
-    Custom_Point(15, 10),
-    Custom_Point(5, 65),
-    Custom_Point(45, 30),
-    Custom_Point(90, 5),
-    Custom_Point(20, 50),
-    Custom_Point(75, 85),
-    Custom_Point(35, 10),
-    Custom_Point(95, 45),
-    Custom_Point(10, 80),
-    Custom_Point(65, 25),
-    Custom_Point(25, 5),
-    Custom_Point(60, 70),
-    Custom_Point(50, 45),
-    Custom_Point(85, 10),
-    Custom_Point(70, 40),
-    Custom_Point(40, 95),
-    Custom_Point(15, 50),
-    Custom_Point(5, 85),
-    Custom_Point(45, 15),
-    Custom_Point(90, 60),
-    Custom_Point(20, 35),
-    Custom_Point(75, 10),
-    Custom_Point(35, 60),
-    Custom_Point(95, 30)
+    // Outline
+    Custom_Point(50, 20), // Top of the head
+    Custom_Point(30, 35), // Upper left forehead
+    Custom_Point(70, 35), // Upper right forehead
+    Custom_Point(20, 50), // Left temple
+    Custom_Point(80, 50), // Right temple
+    Custom_Point(15, 65), // Left cheekbone
+    Custom_Point(85, 65), // Right cheekbone
+    Custom_Point(20, 80), // Left jaw
+    Custom_Point(80, 80), // Right jaw
+    Custom_Point(40, 100), // Bottom left chin
+    Custom_Point(60, 100), // Bottom right chin
+    Custom_Point(50, 90), // Bottom of the chin
+    Custom_Point(30, 75), // Mid left jaw
+    Custom_Point(70, 75), // Mid right jaw
+
+    // Eyes
+    Custom_Point(40, 45), // Left eye left corner
+    Custom_Point(45, 42), // Left eye top
+    Custom_Point(50, 45), // Left eye right corner
+    Custom_Point(45, 48), // Left eye bottom
+    Custom_Point(60, 45), // Right eye left corner
+    Custom_Point(65, 42), // Right eye top
+    Custom_Point(70, 45), // Right eye right corner
+    Custom_Point(65, 48), // Right eye bottom
+
+    // Nose
+    Custom_Point(50, 55), // Nose top
+    Custom_Point(47, 65), // Nose left
+    Custom_Point(53, 65), // Nose right
+    Custom_Point(50, 75), // Nose bottom
+
+    // Mouth
+    Custom_Point(45, 85), // Mouth left corner
+    Custom_Point(50, 82), // Mouth top mid
+    Custom_Point(55, 85), // Mouth right corner
+    Custom_Point(50, 88), // Mouth bottom mid
+
+    // Ears
+    Custom_Point(10, 55), // Left ear top
+    Custom_Point(5, 70), // Left ear middle
+    Custom_Point(10, 85), // Left ear bottom
+    Custom_Point(90, 55), // Right ear top
+    Custom_Point(95, 70), // Right ear middle
+    Custom_Point(90, 85), // Right ear bottom
   ];
   List<Custom_Point> final_convex_hull = [];
-
   List<List<Custom_Point>> upperBridgePoints = [];
   List<List<Custom_Point>> lowerBridgePoints = [];
   List<Custom_Point> quadrilateral = [];
@@ -144,8 +84,32 @@ class _GraphState extends State<Graph> {
   List<List<Custom_Point>> removedP = [];
   List<Custom_Point> temp = [];
 
+  double speed = 1;
+
   double pointx = 0;
   double pointy = 0;
+
+  int numberOfPoints = 10; // Default number of points
+
+  void setNumberOfPoints(String value) {
+    setState(() {
+      numberOfPoints = int.tryParse(value) ?? 10; // Default to 10 if invalid input
+    });
+    }
+  void generateRandomPoints() {
+    clearPoints();
+    setState(() {
+      data = List.generate(
+        numberOfPoints,
+            (index) => Custom_Point(
+          Random().nextDouble()*100.toDouble(), // Random X value between 0 and 100
+          Random().nextDouble()*100.toDouble(), // Random Y value between 0 and 100
+        ),
+      );
+    });
+    print("sadf");
+    print(data);
+  }
 
   void addPointx(String point) {
     setState(() {
@@ -166,25 +130,26 @@ class _GraphState extends State<Graph> {
   }
 
   void runAlgo() async {
-    animatedPoints ap = kirkPatrick(data);
-    print(ap);
+    resetwithoutclear();
+    animatedPoints ap = findkps(data);
     setState(() {
-      p=q;
-      currline=[];
-      updates = [];
-      hull = [];
-      removedP = [];
-      temp = [];
       Ordered = ap.Ordered;
-      // final_convex_hull = ap.final_convex_hull;
     });
-    int a = 10;
+    setState(() {
+      print(data.length);
+      print(upperBridgePoints.length);
+      upperBridgePoints = [];
+      lowerBridgePoints = [];
+      quadrilateral = [];
+      removedPoints = [];
+    });
     for (int i = 0; i < Ordered.length; i++) {
       setState(() {
+        print(upperBridgePoints.length);
         upperBridgePoints.add(Ordered[i][0]);
       });
 
-      await Future.delayed(Duration(milliseconds: a));
+      await Future.delayed(Duration(milliseconds: 1000~/speed));
       setState(() {
         quadrilateral = Ordered[i][1];
       });
@@ -192,34 +157,38 @@ class _GraphState extends State<Graph> {
         continue;
       }
 
-      await Future.delayed(const Duration(milliseconds: 1000));
+      await Future.delayed(Duration(milliseconds: 1000~/speed));
       setState(() {
         removedPoints.add(Ordered[i][2]);
       });
 
-      await Future.delayed(const Duration(milliseconds: 1000));
+      await Future.delayed(Duration(milliseconds: 1000~/speed));
     }
-    await Future.delayed(const Duration(milliseconds: 1000));
+    await Future.delayed(Duration(milliseconds: 1000~/speed));
     setState(() {
-  final_convex_hull = ap.final_convex_hull;
-});
+      final_convex_hull = ap.final_convex_hull;
+      upperBridgePoints = [];
+      lowerBridgePoints = [];
+      quadrilateral = [];
+      removedPoints = [];
+      Ordered = [];
+      splice = 0;
+      p = Custom_Point(0, 0);
+      q = Custom_Point(0, 0);
+      currline = [Custom_Point(0, 0), Custom_Point(0, 0)];
+      updates = [];
+      hull = [];
+      removedP = [];
+      temp = [];
+    });
   }
 
   void runAlgojm() async {
-    
-    animatedPointsjm jm = jarvisMarch(data);
-
+    resetwithoutclear();
+    animatedPointsjm jm = findjm(data);
     setState(() {
-   final_convex_hull = [];
-
- upperBridgePoints = [];
- lowerBridgePoints = [];
- quadrilateral = [];
- removedPoints = [];
-Ordered = [];
       updates = jm.updates;
       removedP = jm.removedP;
-      print(updates);
       hull.add(updates[0][0]);
     });
 
@@ -237,10 +206,10 @@ Ordered = [];
           q = updates[i][j];
           currline[1] = q;
         });
-        await Future.delayed(const Duration(milliseconds: 300));
+        await Future.delayed(Duration(milliseconds: 1000~/speed));
       }
 
-      await Future.delayed(const Duration(milliseconds: 600));
+      await Future.delayed(Duration(milliseconds: 1000~/speed));
       setState(() {
         hull.add(updates[i][updates[i].length - 1]);
       });
@@ -260,8 +229,29 @@ Ordered = [];
       quadrilateral = [];
       removedPoints = [];
       Ordered = [];
-      p=q;
-      currline=[];
+      splice = 0;
+      p = Custom_Point(0, 0);
+      q = Custom_Point(0, 0);
+      currline = [Custom_Point(0, 0), Custom_Point(0, 0)];
+      updates = [];
+      hull = [];
+      removedP = [];
+      temp = [];
+    });
+  }
+
+  void resetwithoutclear(){
+    setState(() {
+      final_convex_hull = [];
+      upperBridgePoints = [];
+      lowerBridgePoints = [];
+      quadrilateral = [];
+      removedPoints = [];
+      Ordered = [];
+      splice = 0;
+      p = Custom_Point(0, 0);
+      q = Custom_Point(0, 0);
+      currline = [Custom_Point(0, 0), Custom_Point(0, 0)];
       updates = [];
       hull = [];
       removedP = [];
@@ -275,144 +265,232 @@ Ordered = [];
       child:Padding(padding: EdgeInsets.all(20),
       child: Column(
         children: [
-          SfCartesianChart(
-            margin: EdgeInsets.all(20),
-            primaryXAxis: const NumericAxis(
-              
-              minimum: -10,
-              maximum: 100,
-                title: AxisTitle(text: 'X'),
-                crossesAt: 0,
-                placeLabelsNearAxisLine: false),
-            primaryYAxis: const NumericAxis(
-              minimum: -10,
-              maximum: 100,
-                title: AxisTitle(text: 'Y'),
-                crossesAt: 0,
-                placeLabelsNearAxisLine: false),
-            series: <CartesianSeries>[
-              ScatterSeries<Custom_Point, double>(
-                dataSource: data,
-                xValueMapper: (Custom_Point data, _) => data.x as double?,
-                yValueMapper: (Custom_Point data, _) => data.y,
-              ),
-              ...upperBridgePoints.map((List<Custom_Point> points) {
-                return LineSeries<Custom_Point, double>(
+          Container(
+            width: 400,
+            child: SfCartesianChart(
+              plotAreaBackgroundColor: kColorPlotBack,
+              backgroundColor: kColorSecondary,
+              margin: EdgeInsets.all(20),
+              primaryXAxis: const NumericAxis(
+                minimum: -10,
+                maximum: 110,
+                  title: AxisTitle(text: 'X'),
+                  crossesAt: 0,
+                  placeLabelsNearAxisLine: false),
+              primaryYAxis: const NumericAxis(
+                minimum: -10,
+                maximum: 110,
+                  title: AxisTitle(text: 'Y'),
+                  crossesAt: 0,
+                  placeLabelsNearAxisLine: false),
+              series: <CartesianSeries>[
+                ScatterSeries<Custom_Point, double>(
+                  animationDuration: 0,
+                  color: kColorPoints,
+                  dataSource: data,
+                  xValueMapper: (Custom_Point data, _) => data.x as double?,
+                  yValueMapper: (Custom_Point data, _) => data.y,
+                ),
+                ...upperBridgePoints.map((List<Custom_Point> points) {
+                  return LineSeries<Custom_Point, double>(
+                      animationDuration: 0,
+                      dataSource: points,
+                      xValueMapper: (Custom_Point data, _) => data.x as double?,
+                      yValueMapper: (Custom_Point data, _) => data.y,
+                      color: kColorGreen,
+                      width: 2);
+                }),
+                LineSeries<Custom_Point, double>(
+                  animationDuration: 0,
+                  dataSource: quadrilateral,
+                  xValueMapper: (Custom_Point data, _) => data.x as double?,
+                  yValueMapper: (Custom_Point data, _) => data.y,
+                  color: kColorRed,
+                ),
+                ...removedPoints.map((List<Custom_Point> points) {
+                  return ScatterSeries<Custom_Point, double>(
                     animationDuration: 0,
-                    
+
                     dataSource: points,
                     xValueMapper: (Custom_Point data, _) => data.x as double?,
                     yValueMapper: (Custom_Point data, _) => data.y,
-                    color: Colors.green,
-                    width: 2);
-              }),
-              LineSeries<Custom_Point, double>(
-                animationDuration: 0,
-               
-                dataSource: quadrilateral,
-                xValueMapper: (Custom_Point data, _) => data.x as double?,
-                yValueMapper: (Custom_Point data, _) => data.y,
-                color: Colors.red,
-              ),
-              ...removedPoints.map((List<Custom_Point> points) {
-                return ScatterSeries<Custom_Point, double>(
-                  animationDuration: 0,
-                  
-                  dataSource: points,
-                  xValueMapper: (Custom_Point data, _) => data.x as double?,
-                  yValueMapper: (Custom_Point data, _) => data.y,
-                  color: Colors.red,
-                  // pointColorMapper: (Custom_Point data, _) => Colors.blue,
-                  // pointBorderColorMapper: (Custom_Point data, _) => Colors.blue,
-                  // borderWidth: 2
-                );
-              }),
+                    color: kColorRed,
+                    // pointColorMapper: (Custom_Point data, _) => Colors.blue,
+                    // pointBorderColorMapper: (Custom_Point data, _) => Colors.blue,
+                    // borderWidth: 2
+                  );
+                }),
 
-              LineSeries<Custom_Point, double>(
+                LineSeries<Custom_Point, double>(
+                    animationDuration: 0,
+                    dataSource: final_convex_hull,
+                    xValueMapper: (Custom_Point data, _) => data.x as double?,
+                    yValueMapper: (Custom_Point data, _) => data.y,
+                    color: kColorConvexHull,
+                    width: 4),
+                LineSeries<Custom_Point, double>(
+                    animationDuration: 100,
+                    dataSource: hull,
+                    xValueMapper: (Custom_Point data, _) => data.x as double?,
+                    yValueMapper: (Custom_Point data, _) => data.y,
+                    color: kColorGreen,
+                    width: 2),
+                LineSeries<Custom_Point, double>(
+                    animationDuration: 0,
+                    dataSource: [p, q],
+                    xValueMapper: (Custom_Point data, _) => data.x as double?,
+                    yValueMapper: (Custom_Point data, _) => data.y,
+                    color: kColorRed,
+                    width: 2),
+                ScatterSeries<Custom_Point, double>(
                   animationDuration: 0,
-                  dataSource: final_convex_hull,
+                  dataSource: temp,
                   xValueMapper: (Custom_Point data, _) => data.x as double?,
                   yValueMapper: (Custom_Point data, _) => data.y,
-                  color: Colors.blue,
-                  width: 2),
-              LineSeries<Custom_Point, double>(
-                  animationDuration: 100,
-                  dataSource: hull,
-                  xValueMapper: (Custom_Point data, _) => data.x as double?,
-                  yValueMapper: (Custom_Point data, _) => data.y,
-                  color: Colors.green,
-                  width: 2),
-              LineSeries<Custom_Point, double>(
-                  animationDuration: 0,
-                  dataSource: [p, q],
-                  xValueMapper: (Custom_Point data, _) => data.x as double?,
-                  yValueMapper: (Custom_Point data, _) => data.y,
-                  color: Colors.red,
-                  width: 2),
-              ScatterSeries<Custom_Point, double>(
-                animationDuration: 0,
-                dataSource: temp,
-                xValueMapper: (Custom_Point data, _) => data.x as double?,
-                yValueMapper: (Custom_Point data, _) => data.y,
-                color: Colors.red,
-              ),
-            ],
-          ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(500, 50, 500, 10),
-            child: TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'X',
-              ),
-              onChanged: (String value) {
-                addPointx(value);
-              },
+                  color: kColorRed,
+                ),
+              ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(500, 10, 500, 20),
-            child: TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Y',
-              ),
-              onChanged: (String value) {
-                addPointy(value);
-              },
-            ),
-          ),
-          const SizedBox(width: 20),
+          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                width: 100,
+                height: 30,
+                child: TextField(
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    border: OutlineInputBorder(),
+                    hintText: 'X',
+                  ),
+                  onChanged: (String value) {
+                    addPointx(value);
+                  },
+                ),
+              ),
+              SizedBox(width: 8,),
+              Container(
+                width: 100,
+                height: 30,
+                child: TextField(
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    border: OutlineInputBorder(),
+                    hintText: 'Y',
+                  ),
+                  onChanged: (String value) {
+                    addPointy(value);
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 20),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 8,),
               ElevatedButton(
                 onPressed: addPoint,
-                child: const Text('Add Custom_Point'),
+                child: const Text('Add Custom Point'),
               ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: clearPoints,
                 child: const Text('Clear Points'),
               ),
             ],
           ),
+          SizedBox(height: 20,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 300,
+                height: 50,
+                child: TextField(
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    border: OutlineInputBorder(),
+                    hintText: 'Number of points (default 10)',
+                  ),
+                  onChanged: (String value) {
+                    setNumberOfPoints(value);
+                  },
+                ),
+              ),
+              SizedBox(width: 10),
+              // Button to generate random points
+              ElevatedButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  backgroundColor: MaterialStateProperty.all<Color>(kColorPrimary),
+                ),
+                onPressed: generateRandomPoints,
+                child: const Text('Generate', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
+
+          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  backgroundColor: MaterialStateProperty.all<Color>(kColorPrimary),
+                ),
                 onPressed: runAlgo,
-                child: const Text('Run kps'),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: const Text('Run Kirk Patrick Seidel Algorithm', style: TextStyle(color: Colors.white)),
+                ),
               ),
+              SizedBox(width: 20),
               ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                   
-                  });
-                  runAlgojm();},
-                child: const Text('Run jm'),
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  backgroundColor: MaterialStateProperty.all<Color>(kColorPrimary),
+                ),
+                onPressed: runAlgojm,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: const Text('Run Jarvis March Algorithm', style: TextStyle(color: Colors.white)),
+                ),
               ),
             ],
           ),
+          SizedBox(height: 20),
+          Container(width: 400, child:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Speed: '),
+              Slider(value: speed,
+                  min: 1,
+                  max: 20,
+                  onChanged: (value) {
+                setState(() {
+                  speed = value;
+                });
+              }),
+            ],
+          )),
         ],
       )),
     );
